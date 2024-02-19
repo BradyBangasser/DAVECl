@@ -3,8 +3,17 @@
 # Written By Brady Bangasser
 # This script is meant to be run on the pi node
 
+source utils.sh
+
 BASENAME="dave"
+MASTER="false"
 
-sudo su
+while getopts "m:b" flag; do
+    case "${flag}" in
+        b) BASENAME="$OPTARG" ;;
+        R) MASTER='true';;
+    esac
+done
 
-echo "" | tee -a /etc/hosts
+id=$(getconfval id)
+master=

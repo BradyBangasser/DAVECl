@@ -2,5 +2,6 @@
 # use awk to parse file
 
 id (int)
+totalNodes (int)
 master (bool)
 db (bool)
