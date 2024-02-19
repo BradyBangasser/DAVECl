@@ -1,0 +1,6 @@
+# config file format
+# use awk to parse file
+
+id (int)
+master (bool)
+db (bool)

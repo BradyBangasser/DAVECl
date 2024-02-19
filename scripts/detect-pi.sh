@@ -10,6 +10,7 @@
 # Tasks
 # Scan ips on interface and return only the ones with with the PI OS
 
-ips=$(sudo arp-scan -l | grep PI)
+
+ips=$(sudo arp-scan -l --interface en6 | grep "Raspberry Pi")
 
 echo $ips
