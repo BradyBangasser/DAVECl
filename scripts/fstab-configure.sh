@@ -1,24 +1,40 @@
 #!/bin/bash
 
+sudo su
+
 echo -n "Welcome to Pi Node Setup <MUST BE RUN IN SUDO>"
 
 HOSTNAME=$(hostname)
-FSTAB_FILE="/etc/fstab"
-
-#echo "$HOSTNAME" | sudo tee $HOSTNAME_FILE
+MASTER_IP_ADDR=$(cat /etc/hosts | grep master | awk '{print $1}')
+IP_SCHEMA=$(cat /etc/hosts | grep master | awk '{print $1}')
 
 #-------- apt installs ----------
 
-#sudo apt install ntpdate -y
-#sudo apt install nfs-common -y
+apt install ntpdate -y
+apt install nfs-common -y
 
 #------- nfs mounting -----------
 
-#sudo mkdir /clusterfs
-#sudo chown nobody.nogroup /clusterfs
-#sudo chmod -R 777 /clusterfs
+if [ "$HOSTNAME" == "master" ]; then
+    apt install nfs-kernel-server -y
+    UUID=$(Blkid -s UUID -o value -t LABEL="/clusterfs")
 
-echo $HOSTNAME
+    mkdir /clusterfs
+    chown nobody.nogroup /clusterfs
+    chmod -R 777 /clusterfs
 
-#echo "$MASTER_IP_ADDR:/clusterfs    /clusterfs    nfs    defaults    0 0" | sudo tee -a $FSTAB_FILE
+    echo "UUID=$UUID /clusterfs ext4 defaults 0 2" | tee -a /etc/fstab
+    mount -a
+
+    chown nobody.nogroup -R /clusterfs
+    chmod -R 766 /clusterfs
+
+    echo "/clusterfs    $MASTER_IP_ADDR (rw,sync,no_root_squash,no_subtree_check)" | tee -a /etc/exports
+
+
+
+
+fi
+
+echo "$MASTER_IP_ADDR:/clusterfs    /clusterfs    nfs    defaults    0 0" | tee -a /etc/fstab
 
