@@ -39,9 +39,6 @@ if [ "$db" == "" ]; then
     db="false"
 fi
 
-# Set hostname
-echo "$BASENAME$id" | tee $HOSTFILEPATH
-
 masters=$(getconfval masters)
 masters=(${masters//,/ })
 
@@ -53,7 +50,7 @@ printf "%b" "$GENERATEDFILEMESSAGE" > $TMPHOSTFILE
 #################
 
 printf "%-15s %s\n" "127.0.0.1" "localhost" >> $TMPHOSTFILE
-printf "-15s %s\n" "127.0.0.1" "$BASENAME$id" >> $TMPHOSTFILE
+printf "%-15s %s\n" "127.0.0.1" "$BASENAME$id" >> $TMPHOSTFILE
 printf "%-15s %s\n" "255.255.255.255" "broadcasthost" >> $TMPHOSTFILE
 printf "%-15s %s\n\n" "::1" "localhost" >> $TMPHOSTFILE
 
@@ -114,8 +111,8 @@ static ip_address=$BASEIP$id" >> $TMPDHCPFILE
 
 if [ "$DEBUG" == "false" ]; then 
     sudo mv $TMPDHCPFILE /etc/dchpcd.conf
+    echo "$BASENAME$id" | sudo dd of=/etc/hostname
     sudo mv $TMPHOSTFILE /etc/hosts
-    rm $TMPDHCPFILE $TMPHOSTFILE
 
     sudo reboot
 fi
