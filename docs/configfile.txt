@@ -2,6 +2,7 @@
 # use awk to parse file
 
 id (int)
-totalNodes (int)
+masters (ip list)
+dbs (ip list)
 master (bool)
 db (bool)

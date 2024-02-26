@@ -1,4 +1,4 @@
-# !/usr/bin/env sh
+# !/usr/bin/env bash
 
 # Copy and Paste functions from this or use source/.
 
@@ -8,6 +8,5 @@ CONFIGPATH="../tests/node.conf"
 
 # this does not work in a sudo su
 getconfval() {
-    echo "heree"
-    # echo $(cat $CONFIGPATH | grep $1 | awk '{print $2}')
+    cat $CONFIGPATH | grep $1 | awk '{print $2}'
 }
