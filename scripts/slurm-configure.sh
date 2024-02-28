@@ -1,45 +1,38 @@
 #!/bin/bash
 
 sudo su
-SRC=/home/kira/programing/DAVECl
-
+source ./utils.sh
 
 HOSTNAME=$(cat /etc/hostname)
 MASTER_IP=$(awk 'master0 {print $1}' /etc/hosts)
 HOST_IP=$(awk -v HOSTNAME="$HOSTNAME" '$0~HOSTNAME {print $1}' /etc/hosts)
 SLURM_CONF=/etc/slurm-llnl/slurm.conf
 
-CLUSTER_NAME=$(${SRC}/scripts/utils.sh getConfVal cluster_name)
-SLURM_CTLD_HOST=$(${SRC}/scripts/utils.sh getConfVal slurm_ctld_host)
-
-SELECT_TYPE=$(${SRC}/scripts/utils.sh getConfVal select_type)
-SELECT_TYPE_PARAMETERS=$(${SRC}/scripts/utils.sh getConfVal select_type_parameters)
-NODE_LIST=${}
-PARTITION_NAME_LINE=${}
-
-
-if [ "$MASTER_IP" == "$HOST_IP" ]; then
-    apt install slurm-wlm -y
-
-    echo "ClusterName=${CLUSTER_NAME}" > $SLURM_CONF
-    echo "SlurmCtldHost=${SLURM_CTLD_HOST}"  >> $SLURM_CONF
-    echo "SelectType=${SELECT_TYPE}" >> $SLURM_CONF
-    echo "SelectTypeParameters=$SELECT_TYPE_PARAMETERS"
+CLUSTER_NAME=$(getconfval cluster_name)
+SLURM_CTLD_HOST=$(getconfval slurm_ctld_host)
+SELECT_TYPE=$(getconfval select_type_mode)
+SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
+NODE_LIST=$(getconfval NodeName)
+PARTITION_NAME_LINE=$(getconfval PartitionName)
 
 
-    echo ${SRC}/resources/slurm-template.conf >> $SLURM_CONF
+apt install slurm-wlm -y
 
-
-
-    #slurm.conf
+echo "ClusterName=${CLUSTER_NAME}" > $SLURM_CONF
+echo "SlurmCtldHost=${SLURM_CTLD_HOST}"  >> $SLURM_CONF
+echo "SelectType=${SELECT_TYPE}" >> $SLURM_CONF
+echo "SelectTypeParameters=$SELECT_TYPE_PARAMETERS" >> $SLURM_CONF
+echo "NodeName=$NODE_LIST" >> $SLURM_CONF
+echo "$PARTITION_NAME_LINE" >> $SLURM_CONF
+cat ./tests/slurm-template.conf >> $SLURM_CONF
 
 
 
 
+echo "$SRC $HOSTNAME $HOST_IP $MASTER_IP $SLURM_CTLD_HOST $CLUSTER_NAME $SELECT_TYPE_PARAMETERS $SELECT_TYPE"
 
-else
-    echo "oop"
-fi
+
+
 
 # Unused until farther notice
 

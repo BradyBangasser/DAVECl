@@ -9,10 +9,10 @@ db (bool)
 
 # SLURM CONFIGURATIONS
 
-cluster_name            (str <- all lowercase please)
-slurm_ctld_host         (str <- hostname of head)
-select_type             (str <- "select")
-select_type_parameters  (str <- "CR_" and "Core", "Core_Memory", "Socket")
+cluster_name davecl
+slurm_ctld_host DAVE1(192.168.2.1)
+select_type select/cons_tres
+select_type_parameters CR_Core_Memory
 
 # For all nodes fill out this in one line per node
 NodeName= (NODE HOST NAME) CPUs= (NUM OF CORES) RealMemory= (MEMORY)
