@@ -2,8 +2,6 @@
 
 sudo su
 
-echo -n "Welcome to Pi Node Setup <MUST BE RUN IN SUDO>"
-
 HOSTNAME=$(hostname)
 MASTER_IP_ADDR=$(awk 'master {print $1}' /etc/hosts)
 IP_SCHEMA=${MASTER_IP_ADDR%.*$}
