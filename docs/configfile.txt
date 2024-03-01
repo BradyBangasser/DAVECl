@@ -10,7 +10,6 @@ db (bool)
 # SLURM CONFIGURATIONS
 
 cluster_name            (str <- all lowercase please)
-slurm_ctld_host         (str <- hostname of head)
 select_type             (str <- "select")
 select_type_parameters  (str <- "CR_" and "Core", "Core_Memory", "Socket")
 
@@ -19,8 +18,6 @@ NodeName= (NODE HOST NAME) CPUs= (NUM OF CORES) RealMemory= (MEMORY)
 
 # Example partition line
 PartitionName=debug Nodes=ALL Default=YES MaxTime=INFINITE State=UP
-
-
 
 ################### UNIMPLEMENTED ####################
 # This contains all possible variables for the config

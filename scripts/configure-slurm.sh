@@ -9,7 +9,6 @@ HOST_IP=$(awk -v HOSTNAME="$HOSTNAME" '$0~HOSTNAME {print $1}' /etc/hosts)
 SLURM_CONF=/etc/slurm-llnl/slurm.conf
 
 CLUSTER_NAME=$(getconfval cluster_name)
-SLURM_CTLD_HOST=$(getconfval slurm_ctld_host)
 SELECT_TYPE=$(getconfval select_type_mode)
 SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
 NODE_LIST=$(getconfval NodeName)
@@ -19,7 +18,7 @@ PARTITION_NAME_LINE=$(getconfval PartitionName)
 apt install slurm-wlm -y
 
 echo "ClusterName=${CLUSTER_NAME}" > $SLURM_CONF
-echo "SlurmCtldHost=${SLURM_CTLD_HOST}"  >> $SLURM_CONF
+echo "SlurmCtldHost=master0"  >> $SLURM_CONF
 echo "SelectType=${SELECT_TYPE}" >> $SLURM_CONF
 echo "SelectTypeParameters=$SELECT_TYPE_PARAMETERS" >> $SLURM_CONF
 echo "NodeName=$NODE_LIST" >> $SLURM_CONF
