@@ -1,0 +1,12 @@
+cluster_name dave
+
+numberOfNodes (int)
+node_id (int)
+master (bool)
+db (bool)
+masters (ip list)
+dbs (ip list)
+
+select_type (str)
+select_type_parameters (str)
+
