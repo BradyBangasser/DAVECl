@@ -23,9 +23,9 @@ while getopts "mdgb:" flag; do
     esac
 done
 
-id=$(getconfval id)
-master=$(getconfval master)
-db=$(getconfval db)
+id=$(getconfval node_id)
+master=$(getconfval is_master)
+db=$(getconfval is_db)
 masters=$()
 dbs=$()
 
@@ -39,7 +39,7 @@ if [ "$db" == "" ]; then
     db="false"
 fi
 
-masters=$(getconfval masters)
+masters=$(getconfval cluster_masters)
 masters=(${masters//,/ })
 
 # Start setting the hostname file
@@ -66,7 +66,7 @@ for maip in "${masters[@]}"; do
     ((i++))
 done
 
-dbs=$(getconfval dbs)
+dbs=$(getconfval cluster_dbs)
 dbs=(${dbs//,/ })
 
 i=0
@@ -79,7 +79,7 @@ for dbip in "${dbs[@]}"; do
     ((i++))
 done
 
-non=$(getconfval non)
+non=$(getconfval numberOfNodes)
 non=$(($non))
 
 echo "
