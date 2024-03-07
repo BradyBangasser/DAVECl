@@ -1,4 +1,4 @@
-# !/usr/bin/env bash
+#!/usr/bin/env bash
 
 # Written By Brady Bangasser
 # This script is meant to be run on the pi node
@@ -74,7 +74,7 @@ i=0
 echo "
 # DB Hosts
 " >> $TMPHOSTFILE
-for dbip in "${dbs[@]}"; do 
+for dbip in "${dbs[@]}"; do
     printf "%-15s %s\n" "$dbip" "db$i" >> $TMPHOSTFILE
     ((i++))
 done
@@ -109,7 +109,7 @@ arping $profile_name
 echo "profile $profile_name
 static ip_address=$BASEIP$id" >> $TMPDHCPFILE
 
-if [ "$DEBUG" == "false" ]; then 
+if [ "$DEBUG" == "false" ]; then
     sudo mv $TMPDHCPFILE /etc/dchpcd.conf
     echo "$BASENAME$id" | sudo dd of=/etc/hostname
     sudo mv $TMPHOSTFILE /etc/hosts

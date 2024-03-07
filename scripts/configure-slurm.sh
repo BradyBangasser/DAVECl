@@ -14,26 +14,50 @@ SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
 NODE_LIST=$(getconfval NodeName)
 PARTITION_NAME_LINE=$(getconfval PartitionName)
 
+if stat /etc/"$CLUSTER_NAME"/master.txt; then
+    apt install slurm-wlm -y
+    apt install ntpdate -y
 
-apt install slurm-wlm -y
+    echo "ClusterName=${CLUSTER_NAME}" > $SLURM_CONF
+    echo "SlurmCtldHost=master0"  >> $SLURM_CONF
+    echo "SelectType=${SELECT_TYPE}" >> $SLURM_CONF
+    echo "SelectTypeParameters=$SELECT_TYPE_PARAMETERS" >> $SLURM_CONF
+    echo "NodeName=$NODE_LIST" >> $SLURM_CONF
+    echo "$PARTITION_NAME_LINE" >> $SLURM_CONF
 
-echo "ClusterName=${CLUSTER_NAME}" > $SLURM_CONF
-echo "SlurmCtldHost=master0"  >> $SLURM_CONF
-echo "SelectType=${SELECT_TYPE}" >> $SLURM_CONF
-echo "SelectTypeParameters=$SELECT_TYPE_PARAMETERS" >> $SLURM_CONF
-echo "NodeName=$NODE_LIST" >> $SLURM_CONF
-echo "$PARTITION_NAME_LINE" >> $SLURM_CONF
-cat ./tests/slurm-template.conf >> $SLURM_CONF
+    cat ./tests/slurm-template.conf >> $SLURM_CONF
 
+    cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
+    cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
 
+    cp slurm.conf cgroup.conf cgroup_allowed_devices_file.conf /clusterfs
+    cp /etc/munge/munge.key /clusterfs
 
+    systemctl enable munge
+    systemctl start munge
+
+    systemctl enable slurmd
+    systemctl start slurmd
+
+    systemctl enable slurmctld
+    systemctl start slurmctld
+
+else
+    apt install slurmd slurm-client -y
+    cp /clusterfs/munge.key /etc/munge/munge.key
+    cp /clusterfs/slurm.conf /etc/slurm-llnl/slurm.conf
+    cp /clusterfs/cgroup* /etc/slurm-llnl
+
+    systemctl enable munge
+    systemctl start munge
+
+    systemctl enable slurmd
+    systemctl start slurmd
+fi
 
 echo "$SRC $HOSTNAME $HOST_IP $MASTER_IP $SLURM_CTLD_HOST $CLUSTER_NAME $SELECT_TYPE_PARAMETERS $SELECT_TYPE"
 
-
-
-
-# Unused until farther notice
+#---------------------Unused until farther notice-----------------------------
 
 #PROCTRACK_TYPE=$(${SRC}/scripts/utils.sh getConfVal proctrack_type)
 #RETURN_TO_SERVICE=$(${SRC}/scripts/utils.sh getConfVal return_to_service)
