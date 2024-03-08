@@ -1,0 +1,55 @@
+
+# all scripts using this file should have the line (source ./utils.sh)
+# inside of utils.sh there is a function called "getconfval" and takes the
+# argument of the configuration value that you are wanting to get.
+
+
+# for scripts to work properly there must be at least one
+# master and at least one db, they are able to be the same node
+
+numberOfNodes (int)
+cluster_masters (ip list)
+cluster_dbs (ip list)
+ip_submask (same as one of the master ips, make the last segment .0/24)
+
+# Need to be set for each node after copying the config
+
+node_id (int <- node specific)
+is_master (bool <- node specific)
+is_db (bool <- node specific)
+
+
+
+
+# Slurm configurations
+# NOTE: the word 'and' means one of the following strings not all of them.
+
+cluster_name            (str <- all lowercase)
+select_type             (str <- "select/" and "cons_res", "cons_tres", "linear")
+select_type_parameters  (str <- "CR_" and "Core", "Core_Memory", "Socket")
+
+# For all nodes fill out this in one line per node
+NodeName= (NODE HOST NAME) CPUs= (NUM OF CORES) RealMemory= (MEMORY)
+
+# Partition line
+PartitionName=debug Nodes=ALL Default=YES MaxTime=INFINITE State=UP
+
+################### UNIMPLEMENTED ####################
+# This contains all possible variables for the config
+# of the slurmctld
+# proctrack_type          (str <- "proctrack/" and "cgroup", "gpid", "linuxproc"
+# return_to_service       (int <- default 0, supports thru 2)
+# slurmctld_pid_file      (str <- FILE PATH, recommended leaving as /run/slurmctld.pid)
+# slurmd_pid_file         (str <- FILE PATH, recommended leaving as /run/slurmd.pid)
+# slurmd_spool_dir        (str <- FILE PATH, recommended leaving as /var/lib/slurm/slurmd)
+# state_save_location     (str <- FILE PATH, recommended leaving as/var/lib/slurm/slurmctld)
+# slurm_user              (str <- name of user slurmctld uses, do not use root.)
+# task_plugin             (str <- "task/" and "none", "cgroup", "affinity")
+# scheduler_type          (str <- "sched/" and "backfill", "builtin")
+# accounting_storage_type (str <- "accounting_storage/" and "none", "slurmdbd")
+# job_comp_type           (see slurm-wlm.conf)
+# job_acct_gather_type    (see slurm-wlm.conf)
+# slurmctld_log_file      (str <- FILE PATH, recommended leaving as /var/log/slurm/slurmctld.log)
+# slurmd_debug            (see slurm-wlm.conf)
+# slurmd_log_file         (str <- FILE PATH, recommended leaving as /var/log/slurm/slurmd.log)
+

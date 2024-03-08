@@ -14,45 +14,47 @@ SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
 NODE_LIST=$(getconfval NodeName)
 PARTITION_NAME_LINE=$(getconfval PartitionName)
 
-if stat /etc/"$CLUSTER_NAME"/master.txt; then
-    apt install slurm-wlm -y
-    apt install ntpdate -y
+if getconfval is_master; then
+    sudo apt install slurm-wlm -y
+    sudo apt install ntpdate -y
 
-    echo "ClusterName=${CLUSTER_NAME}" > $SLURM_CONF
-    echo "SlurmCtldHost=master0"  >> $SLURM_CONF
-    echo "SelectType=${SELECT_TYPE}" >> $SLURM_CONF
-    echo "SelectTypeParameters=$SELECT_TYPE_PARAMETERS" >> $SLURM_CONF
-    echo "NodeName=$NODE_LIST" >> $SLURM_CONF
-    echo "$PARTITION_NAME_LINE" >> $SLURM_CONF
+    cat << config0 > $SLURM_CONF
+ClusterName=${CLUSTER_NAME}
+SlurmCtldHost=$HOSTNAME
+SelectType=${SELECT_TYPE}
+SelectTypeParameters=$SELECT_TYPE_PARAMETERS
+NodeName=$NODE_LIST
+$PARTITION_NAME_LINE
+config0
 
     cat ./tests/slurm-template.conf >> $SLURM_CONF
 
-    cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
-    cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
+    sudo cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
+    sudo cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
 
-    cp slurm.conf cgroup.conf cgroup_allowed_devices_file.conf /clusterfs
-    cp /etc/munge/munge.key /clusterfs
+    sudo cp slurm.conf cgroup.conf cgroup_allowed_devices_file.conf /clusterfs
+    sudo cp /etc/munge/munge.key /clusterfs
 
-    systemctl enable munge
-    systemctl start munge
+    sudo systemctl enable munge
+    sudo systemctl start munge
 
-    systemctl enable slurmd
-    systemctl start slurmd
+    sudo systemctl enable slurmd
+    sudo systemctl start slurmd
 
-    systemctl enable slurmctld
-    systemctl start slurmctld
+    sudo systemctl enable slurmctld
+    sudo systemctl start slurmctld
 
 else
-    apt install slurmd slurm-client -y
-    cp /clusterfs/munge.key /etc/munge/munge.key
-    cp /clusterfs/slurm.conf /etc/slurm-llnl/slurm.conf
-    cp /clusterfs/cgroup* /etc/slurm-llnl
+    sudo apt install slurmd slurm-client -y
+    sudo cp /clusterfs/munge.key /etc/munge/munge.key
+    sudo cp /clusterfs/slurm.conf /etc/slurm-llnl/slurm.conf
+    sudo cp /clusterfs/cgroup* /etc/slurm-llnl
 
-    systemctl enable munge
-    systemctl start munge
+    sudo systemctl enable munge
+    sudo systemctl start munge
 
-    systemctl enable slurmd
-    systemctl start slurmd
+    sudo systemctl enable slurmd
+    sudo systemctl start slurmd
 fi
 
 echo "$SRC $HOSTNAME $HOST_IP $MASTER_IP $SLURM_CTLD_HOST $CLUSTER_NAME $SELECT_TYPE_PARAMETERS $SELECT_TYPE"
