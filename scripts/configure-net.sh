@@ -110,6 +110,11 @@ echo "profile $profile_name
 static ip_address=$BASEIP$id" >> $TMPDHCPFILE
 
 if [ "$DEBUG" == "false" ]; then
+
+    if [ "$master" == "" ]; then
+        sudo touch "/etc/$BASENAME/master"
+    fi
+
     sudo mv $TMPDHCPFILE /etc/dchpcd.conf
     echo "$BASENAME$id" | sudo dd of=/etc/hostname
     sudo mv $TMPHOSTFILE /etc/hosts
