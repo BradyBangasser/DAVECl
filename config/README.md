@@ -1,4 +1,4 @@
-
+# Configuration Files
 This is the directory you should put all of your node configurations in.
 
 Fill out the config.txt file with the required information then,
