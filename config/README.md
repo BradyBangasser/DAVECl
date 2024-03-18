@@ -9,10 +9,10 @@ After this is completed then go to the head directory and run the command
 want this node to be it is recommended to do the rest of the prosses on the
 head node first and make sure you follow the correct script order.
 
-After unpacking go to your home directory and run:
+**After** unpacking go to your home directory and run:
 1) ./configure-net.sh
 
-Net config will restart your node.
+**Net config will restart your node.**
 
 2) ./configure-fstab.sh
 3) ./configure-slurm.sh
