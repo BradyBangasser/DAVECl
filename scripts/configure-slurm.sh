@@ -1,6 +1,5 @@
 #!/bin/bash
 
-sudo su
 source ./utils.sh
 
 HOSTNAME=$(cat /etc/hostname)
@@ -27,7 +26,7 @@ NodeName=$NODE_LIST
 $PARTITION_NAME_LINE
 config0
 
-    cat ./tests/slurm-template.conf >> $SLURM_CONF
+    cat ./slurm-template.conf >> $SLURM_CONF
 
     sudo cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
     sudo cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf

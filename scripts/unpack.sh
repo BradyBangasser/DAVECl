@@ -10,4 +10,5 @@
 SC=scripts/configure-
 
 cp ./config/"$1"/config.txt ~
+cp ./resources/* ~
 cp ./${SC}net.sh ./${SC}fstab.sh ./${SC}slurm.sh ./scripts/utils.sh ~
