@@ -40,7 +40,7 @@ if [ "$db" == "" ]; then
     db="false"
 fi
 
-masters=$(getconfval cluster_masters)
+masters=$(getconfval masters)
 masters=(${masters//,/ })
 
 # Start setting the hostname file
@@ -67,7 +67,7 @@ for maip in "${masters[@]}"; do
     ((i++))
 done
 
-dbs=$(getconfval cluster_dbs)
+dbs=$(getconfval dbs)
 dbs=(${dbs//,/ })
 
 i=0
@@ -103,15 +103,15 @@ printf "%b" "$GENERATEDFILEMESSAGE" > $TMPDHCPFILE
 
 profile_name="node_profile"
 
-echo "interface en0
-arping $profile_name
-" >> $TMPDHCPFILE
-
 ipend=$(($id + $IPSTART))
 
 echo "profile $profile_name
 static ip_address=$BASEIP$ipend
 static routers=$BASEIP$ROUTER" >> $TMPDHCPFILE
+
+echo "interface eth0
+fallback $profile_name
+" >> $TMPDHCPFILE
 
 if [ "$DEBUG" == "false" ]; then
 
