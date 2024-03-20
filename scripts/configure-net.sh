@@ -14,6 +14,7 @@ TMPDHCPFILE="dhcpcd.conf.tmp"
 HOSTFILEPATH="host" # will be /etc/hosts
 BASEIP="192.168.2."
 IPSTART=5
+ROUTER=1
 
 while getopts "mdgb:" flag; do
     case "${flag}" in
@@ -79,7 +80,7 @@ for dbip in "${dbs[@]}"; do
     ((i++))
 done
 
-non=$(getconfval numberOfNodes)
+non=$(getconfval number_of_nodes)
 non=$(($non))
 
 echo "
@@ -109,7 +110,8 @@ arping $profile_name
 ipend=$(($id + $IPSTART))
 
 echo "profile $profile_name
-static ip_address=$BASEIP$ipend" >> $TMPDHCPFILE
+static ip_address=$BASEIP$ipend
+static routers=$BASEIP$ROUTER" >> $TMPDHCPFILE
 
 if [ "$DEBUG" == "false" ]; then
 
