@@ -10,23 +10,23 @@ SLURM_CONF=/etc/slurm-llnl/slurm.conf
 CLUSTER_NAME=$(getconfval cluster_name)
 SELECT_TYPE=$(getconfval select_type_mode)
 SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
-NODE_LIST=$(getconfval NodeName)
+NODE_LIST=$(getconfval node_line)
 PARTITION_NAME_LINE=$(getconfval PartitionName)
 
 if getconfval is_master; then
     sudo apt install slurm-wlm -y
     sudo apt install ntpdate -y
 
-    cat << config0 > $SLURM_CONF
+    cat << config0 > sudo tee -a $SLURM_CONF
 ClusterName=${CLUSTER_NAME}
 SlurmCtldHost=$HOSTNAME
 SelectType=${SELECT_TYPE}
 SelectTypeParameters=$SELECT_TYPE_PARAMETERS
-NodeName=$NODE_LIST
+$NODE_LIST
 $PARTITION_NAME_LINE
 config0
 
-    cat ./slurm-template.conf >> $SLURM_CONF
+    cat ./slurm-template.conf | sudo tee -a $SLURM_CONF
 
     sudo cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
     sudo cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
@@ -56,7 +56,7 @@ else
     sudo systemctl start slurmd
 fi
 
-echo "$SRC $HOSTNAME $HOST_IP $MASTER_IP $SLURM_CTLD_HOST $CLUSTER_NAME $SELECT_TYPE_PARAMETERS $SELECT_TYPE"
+# echo "$SRC $HOSTNAME $HOST_IP $MASTER_IP $SLURM_CTLD_HOST $CLUSTER_NAME $SELECT_TYPE_PARAMETERS $SELECT_TYPE"
 
 #---------------------Unused until farther notice-----------------------------
 
