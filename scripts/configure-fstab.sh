@@ -27,7 +27,7 @@ if [[ "$IS_DB" == "true" ]]; then
     echo "UUID=${UUID} /clusterfs ext4 defaults 0 2" >> fstab.tmp
 
     awk '{if ($0 !~ /clusterfs/) {print $0}}' /etc/exports > exports.tmp
-    echo "/clusterfs    $IP_SCHEMA (rw,sync,no_root_squash,no_subtree_check)" >> exports.tmp
+    echo "/clusterfs    "$IP_SCHEMA"(rw,sync,no_root_squash,no_subtree_check)" >> exports.tmp
 
     if [ "$DEBUG" == "false" ]; then
         sudo apt install nfs-kernel-server -y
