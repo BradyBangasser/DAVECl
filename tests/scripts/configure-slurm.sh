@@ -31,7 +31,7 @@ if [ $IS_MASTER == "true" ]; then
     cat << config0 > slurm.conf.tmp
 ClusterName=${CLUSTER_NAME}
 SlurmCtldHost=$HOSTNAME
-SelectType=${SELECT_TYPE}
+SelectType=$SELECT_TYPE
 SelectTypeParameters=$SELECT_TYPE_PARAMETERS
 $NODE_LIST
 $PARTITION_NAME_LINE
