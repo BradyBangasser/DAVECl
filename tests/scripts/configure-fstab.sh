@@ -21,7 +21,7 @@ if [ "$DEBUG" == "false" ]; then
 fi
 #------- nfs mounting -----------
 if [[ "$IS_DB" == "true" ]]; then
-    UUID=$(Blkid -s UUID -o value -t LABEL="/clusterfs")
+    UUID=$(blkid -s UUID -o value -t LABEL="/clusterfs")
 
     awk '{if ($0 !~ /clusterfs/) {print $0}}' /etc/fstab > fstab.tmp
     echo "UUID=${UUID} /clusterfs ext4 defaults 0 2" >> fstab.tmp
