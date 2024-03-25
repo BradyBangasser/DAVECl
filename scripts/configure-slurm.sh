@@ -28,7 +28,7 @@ fi
 
 if [ $IS_MASTER == "true" ]; then
 
-    cat << config0 > slurm.txt
+    cat << config0 > slurm.conf.tmp
 ClusterName=${CLUSTER_NAME}
 SlurmCtldHost=$HOSTNAME
 SelectType=${SELECT_TYPE}
@@ -37,13 +37,13 @@ $NODE_LIST
 $PARTITION_NAME_LINE
 config0
 
-    cat ./slurm-template.conf >> slurm.txt
+    cat ./slurm-template.conf >> slurm.conf.tmp
 
     if [ $DEBUG == "false" ]; then
         sudo apt install slurm-wlm -y
         sudo apt install ntpdate -y
 
-        mv slurm.txt /etc/slurm-llnl/slurm.conf
+        mv slurm.conf.tmp /etc/slurm-llnl/slurm.conf
 
         sudo cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
         sudo cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf

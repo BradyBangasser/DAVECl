@@ -23,28 +23,28 @@ fi
 if [[ "$IS_DB" == "true" ]]; then
     UUID=$(Blkid -s UUID -o value -t LABEL="/clusterfs")
 
-    awk '{if ($0 !~ /clusterfs/) {print $0}}' /etc/fstab >> fstab.txt
-    echo "UUID=${UUID} /clusterfs ext4 defaults 0 2" >> fstab.txt
+    awk '{if ($0 !~ /clusterfs/) {print $0}}' /etc/fstab > fstab.tmp
+    echo "UUID=${UUID} /clusterfs ext4 defaults 0 2" >> fstab.tmp
 
-    awk '{if ($0 !~ /clusterfs/) {print $0}}' /etc/exports exports.txt
-    echo "/clusterfs    $IP_SCHEMA (rw,sync,no_root_squash,no_subtree_check)" >> exports.txt
+    awk '{if ($0 !~ /clusterfs/) {print $0}}' /etc/exports > exports.tmp
+    echo "/clusterfs    $IP_SCHEMA (rw,sync,no_root_squash,no_subtree_check)" >> exports.tmp
 
     if [ "$DEBUG" == "false" ]; then
         sudo apt install nfs-kernel-server -y
         sudo mkdir /clusterfs
         sudo chown nobody.nogroup /clusterfs
         sudo chmod -R 777 /clusterfs
-        sudo mv fstab.txt /etc/fstab
+        sudo mv fstab.tmp /etc/fstab
         sudo mount -a
         sudo chown nobody.nogroup -R /clusterfs
         sudo chmod -R 766 /clusterfs
-        sudo mv exports.txt /etc/exports
+        sudo mv exports.tmp /etc/exports
         sudo exportfs -a
     fi
 
 else
-    cp /etc/fstab fstab.txt
-    echo "${MASTER_IP_ADDR}:/clusterfs    /clusterfs    nfs    defaults    0 0" >> fstab.txt
+    cp /etc/fstab fstab.tmp
+    echo "${MASTER_IP_ADDR}:/clusterfs    /clusterfs    nfs    defaults    0 0" >> fstab.tmp
 
     if [ "$DEBUG" == "false" ]; then
         sudo apt install nfs-kernel-server -y
