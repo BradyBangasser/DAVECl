@@ -14,10 +14,10 @@ Some things to note, it will not always catch fire if you do things out of order
 but there is a very good chance it will. Start setup with the master node/nodes
 and then repeat from there.
 The simple usage is quite simple in nature and the steps are as follows:
-1. Edit the config file (config/config.txt) with the apropreate values for your
+1. Edit the config file (config/dave.conf) with the apropreate values for your
 clusters needs.
 
-2. Make a directory for each node (in config) and then copy config.txt into
+2. Make a directory for each node (in config) and then copy dave.conf into
 that directory.
 
     - Fill out the remaining variables in the config.txt for the individule

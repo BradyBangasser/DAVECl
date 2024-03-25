@@ -9,6 +9,6 @@
 
 SC=scripts/configure-
 
-cp ./config/"$1"/config.txt ~
-cp ./resources/* ~
-cp ./${SC}net.sh ./${SC}fstab.sh ./${SC}slurm.sh ./scripts/utils.sh ./scripts/p1-run.sh ./scripts/p2-run.sh ~
+cp ./config/"$1"/config.txt .
+cp ./resources/* .
+cp ./${SC}net.sh ./${SC}fstab.sh ./${SC}slurm.sh ./scripts/utils.sh ./scripts/p1-run.sh ./scripts/p2-run.sh .
