@@ -43,12 +43,12 @@ config0
         sudo apt install slurm-wlm -y
         sudo apt install ntpdate -y
 
-        mv slurm.conf.tmp /etc/slurm-llnl/slurm.conf
+        sudo mv slurm.conf.tmp /etc/slurm-llnl/slurm.conf
 
-        sudo cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
-        sudo cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
+        sudo cp cgroup.conf /etc/slurm-llnl/cgroup.conf
+        sudo cp cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
 
-        sudo cp slurm.conf cgroup.conf cgroup_allowed_devices_file.conf /clusterfs
+        sudo cp -r /etc/slurm-llnl /clusterfs
         sudo cp /etc/munge/munge.key /clusterfs
 
         sudo systemctl enable munge
