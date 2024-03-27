@@ -63,15 +63,6 @@ config0
 else
     if [ $DEBUG == "false" ]; then
         sudo apt install slurmd slurm-client -y
-        sudo cp /clusterfs/munge.key /etc/munge/munge.key
-        sudo cp /clusterfs/slurm.conf /etc/slurm-llnl/slurm.conf
-        sudo cp /clusterfs/cgroup* /etc/slurm-llnl
-
-        sudo systemctl enable munge
-        sudo systemctl start munge
-
-        sudo systemctl enable slurmd
-        sudo systemctl start slurmd
     fi
 fi
 
