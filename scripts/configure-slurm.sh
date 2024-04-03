@@ -11,7 +11,7 @@ CLUSTER_NAME=$(getconfval cluster_name)
 SELECT_TYPE=$(getconfval select_type_mode)
 SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
 NODE_LIST=$(getconfval node_line)
-PARTITION_NAME_LINE=$(getconfval PartitionName)
+PARTITION_NAME_LINE=$(getconfval partition_name)
 
 IS_MASTER=$(getconfval is_master)
 DEBUG=$(getconfval DEBUG)
@@ -28,27 +28,29 @@ fi
 
 if [ $IS_MASTER == "true" ]; then
 
-    cat << config0 > slurm.conf.tmp
+    cat << EOF > slurm.conf.tmp
 ClusterName=${CLUSTER_NAME}
 SlurmCtldHost=$HOSTNAME
 SelectType=$SELECT_TYPE
 SelectTypeParameters=$SELECT_TYPE_PARAMETERS
 $NODE_LIST
 $PARTITION_NAME_LINE
-config0
+EOF
 
     cat ./slurm-template.conf >> slurm.conf.tmp
 
     if [ $DEBUG == "false" ]; then
         sudo apt install slurm-wlm -y
-        sudo apt install ntpdate -y
+        sudo apt install ntp -y
 
-        sudo mv slurm.conf.tmp /etc/slurm-llnl/slurm.conf
+        echo broadcast 192.168.2.255 | sudo tee -a /etc/ntp.conf
 
-        sudo cp cgroup.conf /etc/slurm-llnl/cgroup.conf
-        sudo cp cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
+        sudo mv slurm.conf.tmp /etc/slurm/slurm.conf
 
-        sudo cp -r /etc/slurm-llnl /clusterfs
+        sudo cp cgroup.conf /etc/slurm/cgroup.conf
+        sudo cp cgroup-allowed-devices.conf /etc/slurm/cgroup_allowed_devices_file.conf
+
+        sudo cp -r /etc/slurm /clusterfs
         sudo cp /etc/munge/munge.key /clusterfs
 
         sudo systemctl enable munge
@@ -62,6 +64,7 @@ config0
     fi
 else
     if [ $DEBUG == "false" ]; then
+        echo server $HOST_IP iburst | sudo tee -a /etc/ntp.conf
         sudo apt install slurmd slurm-client -y
     fi
 fi

@@ -11,7 +11,7 @@ CLUSTER_NAME=$(getconfval cluster_name)
 SELECT_TYPE=$(getconfval select_type_mode)
 SELECT_TYPE_PARAMETERS=$(getconfval select_type_parameters)
 NODE_LIST=$(getconfval node_line)
-PARTITION_NAME_LINE=$(getconfval PartitionName)
+PARTITION_NAME_LINE=$(getconfval partition_name)
 
 IS_MASTER=$(getconfval is_master)
 DEBUG=$(getconfval DEBUG)
@@ -43,12 +43,12 @@ config0
         sudo apt install slurm-wlm -y
         sudo apt install ntpdate -y
 
-        mv slurm.conf.tmp /etc/slurm-llnl/slurm.conf
+        sudo mv slurm.conf.tmp /etc/slurm-llnl/slurm.conf
 
-        sudo cp ./cgroup.conf /etc/slurm-llnl/cgroup.conf
-        sudo cp ./cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
+        sudo cp cgroup.conf /etc/slurm-llnl/cgroup.conf
+        sudo cp cgroup-allowed-devices.conf /etc/slurm-llnl/cgroup_allowed_devices_file.conf
 
-        sudo cp slurm.conf cgroup.conf cgroup_allowed_devices_file.conf /clusterfs
+        sudo cp -r /etc/slurm-llnl /clusterfs
         sudo cp /etc/munge/munge.key /clusterfs
 
         sudo systemctl enable munge
@@ -63,15 +63,6 @@ config0
 else
     if [ $DEBUG == "false" ]; then
         sudo apt install slurmd slurm-client -y
-        sudo cp /clusterfs/munge.key /etc/munge/munge.key
-        sudo cp /clusterfs/slurm.conf /etc/slurm-llnl/slurm.conf
-        sudo cp /clusterfs/cgroup* /etc/slurm-llnl
-
-        sudo systemctl enable munge
-        sudo systemctl start munge
-
-        sudo systemctl enable slurmd
-        sudo systemctl start slurmd
     fi
 fi
 

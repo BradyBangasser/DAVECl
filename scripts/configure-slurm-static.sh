@@ -20,8 +20,7 @@ if [ $IS_MASTER == "true" ]; then
 else
     if [ $DEBUG == "false" ]; then
         sudo cp /clusterfs/munge.key /etc/munge/munge.key
-        sudo cp /clusterfs/slurm.conf /etc/slurm-llnl/slurm.conf
-        sudo cp /clusterfs/cgroup* /etc/slurm-llnl
+        sudo cp -r /clusterfs/slurm-llnl /etc/slurm-llnl/
 
         sudo systemctl enable munge
         sudo systemctl start munge
